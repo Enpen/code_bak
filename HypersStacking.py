@@ -1,37 +1,11 @@
 ### 这里主要是将hypergbm的stacking方法给单独独立了出来，支持直接使用模型保存路径的list进行操作。
 ### 同时支持新特征的生成(多层stacking)
 
-from logging import FATAL
-import os
-import pickle
-from hypernets.core import random_state
 import pandas as pd
 import numpy as np
-import hashlib
-from scipy.stats import kendalltau
-from sklearn.model_selection import train_test_split
-from hypergbm import make_experiment
-from hypernets.searchers import PlaybackSearcher
-from hypernets.utils.param_tuning import search_params
-from hypernets.core.search_space import Int,Choice,Real,Bool
-from hypernets.core.trial import TrialHistory
-from hypergbm.search_space import search_space_general
-from sklearn.model_selection import train_test_split
-from hypernets.searchers import EvolutionSearcher, RandomSearcher
-from hypergbm.search_space import GeneralSearchSpaceGenerator
 from hypernets.tabular.metrics import metric_to_scoring
 from sklearn.metrics import get_scorer
-from sklearn.model_selection import KFold, StratifiedKFold
-import joblib
-# from Mtools import *
-from hypernets.core import randint
-import time
-import random
 from itertools import combinations
-import lightgbm as lgb
-import catboost
-from sklearn.linear_model import LogisticRegression,LinearRegression
-from MyGeneralSearchSpaceGenerator import MyGeneralSearchSpaceGenerator
 from hypergbm import HyperGBMEstimator
 from hypernets.tabular.ensemble.voting import HyperStacking
 import warnings
