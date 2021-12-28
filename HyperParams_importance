@@ -1,0 +1,83 @@
+# from sklearn.preprocessing import StandardScaler
+# from sklearn.linear_model import LinearRegression
+# class Hyperparams_importance():
+#     def __init__(self,trials):
+#         self.scaler_alias = 'numeric_or_scaler_0.hp_or'
+#         self.estimator_alias = 'estimator_options.hp_or'
+#         self.feature_name = {}
+#         self.Records = {}
+#         self.Feature_importance = {}
+#         self._calculate_importance(trials)
+#     def _check_estimator_options(self,params):
+#         if params[0].alias == self.estimator_alias:
+#             return True
+#         return False
+#
+#     def _check_scaler_is_use(self,params):
+#         if params[-1].alias == self.scaler_alias:
+#             return True
+#         return False
+#     def _analyze_trials(self,trials):
+#         for trial in Trials:
+#             estimator_type = [name for name in trial.iteration_scores][0]
+#             if not trial.succeeded:
+#                 continue
+#             if estimator_type in self.Records:
+#                 vectors_ = trial.space_sample.vectors
+#                 if self._check_estimator_options(trial.space_sample.assigned_params_stack):
+#                     vectors_.pop(0)
+#                 if not self._check_scaler_is_use(trial.space_sample.assigned_params_stack):
+#                     vectors_.append(-1)
+#                 self.Records[estimator_type].append((vectors_, trial.reward))
+#             else:
+#                 feature_name = []
+#                 vectors_ = trial.space_sample.vectors
+#                 for hp in trial.space_sample.assigned_params_stack:
+#                     feature_name.append(hp.alias)
+#                 if self._check_estimator_options(trial.space_sample.assigned_params_stack):  ##If the algorithm category exceeds 1, delete corresponding parameter
+#                     feature_name.pop(0)
+#                     vectors_.pop(0)
+#                 if not self._check_scaler_is_use(trial.space_sample.assigned_params_stack):
+#                     feature_name.append(self.scaler_alias)
+#                     vectors_.append(-1)  ##if scaler is Flase, add the scaler_option_param as -1.
+#                 self.feature_name.update({estimator_type: feature_name})
+#                 self.Records.update({estimator_type: [(vectors_, trial.reward)]})
+#     def _calculate_importance(self,trials):
+#         self._analyze_trials(trials)
+#         for estimator_type in self.Records:
+#             data = self.Records[estimator_type]
+#             X = []
+#             Y = []
+#             for x_, y_ in data:
+#                 X.append(x_)
+#                 Y.append(y_)
+#             scaler = StandardScaler()
+#             X = scaler.fit_transform(np.array(X))
+#             lr = LinearRegression(fit_intercept=True)
+#             lr.fit(X, Y)
+#             feature_importance = lr.coef_
+#             _sum = sum([abs(v) for v in feature_importance])
+#             for i in range(len(feature_importance)):
+#                 feature_importance[i] = feature_importance[i] / _sum
+#             tuples = sorted(zip(self.feature_name[estimator_type], feature_importance), key=lambda x: x[1])
+#             self.Feature_importance.update({estimator_type:tuples})
+#
+#     def show_importance(self):
+#         for estimator_type in self.Feature_importance:
+#             labels, importances = zip(*self.Feature_importance[estimator_type])
+#             _, ax = plt.subplots(1, 1)
+#             ylocs = np.arange(len(importances))
+#             ax.barh(ylocs, importances, align='center')
+#             for x, y in zip(importances, ylocs):
+#                 ax.text(x + 0.005, y, str(x)[:6])
+#             ax.set_yticks(ylocs)
+#             ax.set_yticklabels(labels)
+#             ax.set_title('feature_importance')
+#             ax.set_xlabel('importance')
+#             ax.set_ylabel('features')
+#         plt.show()
+# exp = joblib.load('EXP.pkl')
+# hyper_model = exp.hyper_model_
+# Trials = hyper_model.history.trials
+# hyperparams_importance = Hyperparams_importance(Trials)
+# hyperparams_importance.show_importance()
